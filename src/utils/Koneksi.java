@@ -9,11 +9,12 @@ public class Koneksi {
     
     public static Connection getConnection() {
         try {
-            String url = "jdbc:mysql://localhost:3306/Reporting";
+            String url = "jdbc:mysql://localhost:3306/ReportingSystem";
             String user = "root";
-            String pass = "";
+            String pass = "manman";
             
             Connection conn = DriverManager.getConnection(url, user, pass);
+            System.out.println("Koneksi Berhasil");
             return conn;
             
         } catch (Exception e) {
@@ -22,5 +23,4 @@ public class Koneksi {
             
         }
     }
-    
 }

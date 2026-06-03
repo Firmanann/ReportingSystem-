@@ -9,31 +9,30 @@ import java.util.List;
 
 public class PetugasRepository {
 
-    public Petugas login(long idPetugas, String password) {
+    public Petugas login(String email, String password) {
 
-        String sql = """
-                SELECT *
-                FROM petugas
-                WHERE id_petugas = ? AND password = ?
-                """;
+    String sql = """
+            SELECT * FROM petugas 
+            WHERE email_petugas = ? AND password = ?
+            """;
+    
+    try (
+            Connection conn = Koneksi.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)
+    ) {
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        ps.setString(1, email);
+        ps.setString(2, password);
 
-            ps.setLong(1, idPetugas);
-            ps.setString(2, password);
-
-            ResultSet rs = ps.executeQuery();
-
+        try (ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return mapResultSetToPetugas(rs);
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
 
         return null;
     }

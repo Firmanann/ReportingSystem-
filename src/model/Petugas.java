@@ -4,6 +4,7 @@ public class Petugas {
 
     private long idPetugas;
     private String namaPetugas;
+    private String email;
     private String jabatan;
     private String phone;
     private String password;
@@ -11,9 +12,10 @@ public class Petugas {
     public Petugas() {
     }
 
-    public Petugas(long idPetugas, String namaPetugas, String jabatan, String phone, String password) {
+    public Petugas(long idPetugas, String namaPetugas, String email, String jabatan, String phone, String password) {
         this.idPetugas = idPetugas;
         this.namaPetugas = namaPetugas;
+        this.email = email;
         this.jabatan = jabatan;
         this.phone = phone;
         this.password = password;
@@ -33,6 +35,14 @@ public class Petugas {
 
     public void setNamaPetugas(String namaPetugas) {
         this.namaPetugas = namaPetugas;
+    }
+    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getJabatan() {

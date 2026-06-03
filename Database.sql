@@ -16,6 +16,7 @@ CREATE TABLE mahasiswa (
 CREATE TABLE petugas (
     id_petugas SERIAL PRIMARY KEY,
     nama_petugas VARCHAR(100) NOT NULL,
+    email_petugas VARCHAR(100) UNIQUE,
     jabatan VARCHAR(50) NOT NULL,
     no_hp_petugas VARCHAR(20),
     password VARCHAR(255) NOT NULL
