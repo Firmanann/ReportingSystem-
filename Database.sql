@@ -84,7 +84,9 @@ INSERT INTO kategori (nama_kategori, keterangan)
 VALUES
 ('Fasilitas', 'Keluhan terkait sarana dan prasarana kampus'),
 ('Akademik', 'Keluhan terkait proses akademik'),
-('Keuangan', 'Keluhan terkait pembayaran dan administrasi keuangan');
+('Keuangan', 'Keluhan terkait pembayaran dan administrasi keuangan'),
+('Layanan IT', 'Keluhan terkait sistem informasi, WiFi, dan e-learning'),
+('Keamanan', 'Keluhan terkait keamanan, parkir, dan ketertiban kampus');
 
 -- Petugas 
 INSERT INTO petugas (nama_petugas, jabatan, no_hp_petugas, password)

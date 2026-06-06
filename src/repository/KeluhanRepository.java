@@ -63,6 +63,36 @@ public class KeluhanRepository {
 
         return false;
     }
+    
+    // Method khusus untuk menghitung jumlah berdasarkan status
+    public int countKeluhanByStatus(String nim, String status) {
+        int count = 0;
+        String sql = "";
+        
+        // Jika status "Total", hitung semua. Jika bukan, hitung sesuai status.
+        if (status.equals("Total")) {
+            sql = "SELECT COUNT(*) FROM keluhan WHERE nim = ?";
+        } else {
+            sql = "SELECT COUNT(*) FROM keluhan WHERE nim = ? AND status_keluhan = ?";
+        }
+
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nim);
+            if (!status.equals("Total")) {
+                ps.setString(2, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
 
     public Keluhan findById(long idKeluhan) { 
 

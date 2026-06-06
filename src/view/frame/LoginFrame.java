@@ -3,6 +3,7 @@ package view.frame;
 import javax.swing.*;
 import java.awt.*;
 import controller.AuthController;
+import utils.UserSession;
 
 public class LoginFrame extends JFrame {
     
@@ -11,6 +12,7 @@ public class LoginFrame extends JFrame {
     private JButton btnLogin;
     private JButton btnGoToRegister;
 
+    //UI Design
     public LoginFrame() {
         // Setup dasar Frame
         setTitle("Login - Reporting System");
@@ -63,45 +65,69 @@ public class LoginFrame extends JFrame {
         add(formPanel, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);
 
-        // Action Listeners 
+        //Login Button action
         btnLogin.addActionListener(e -> handleLogin());
+
+        //Back to Register button action
         btnGoToRegister.addActionListener(e -> handleGoToRegister());
     }
 
+    //Logic Login
     private void handleLogin() {
+
+        //1. Get data input 
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
         
         AuthController authController = new AuthController();
 
+        //2. Validate input
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Username dan Password harus diisi!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        //Process login 
+        //4. Process login
         String role = authController.login(username, password);
+        UserSession user = new UserSession();
         
-        //Mapping to next page
+        //3. Mapping to next page
         if (role.equals("MAHASISWA")) {
+
+            //Set data user session
+            user.setUser(username);
+
+            //Start main mahasiswa frame
             new MainMahasiswaFrame().setVisible(true);
-            this.dispose(); 
+
+            //Stop this frame
+            this.dispose();
+
         } else if (role.equals("PETUGAS")) {
+
+            //Set data user session
+            user.setUser(username);
+
+            //Start Main petugas frame
             new MainPetugasFrame().setVisible(true);
-            this.dispose(); 
+
+            //Stop this frame
+            this.dispose();
+
         } else {
+
+            //Show notification
             JOptionPane.showMessageDialog(this, "Username atau Password salah!", "Login Gagal", JOptionPane.ERROR_MESSAGE);
         }
         System.out.println("Mencoba login: " + username);
     }
 
+    //Logic back to register
     private void handleGoToRegister() {
-        // Buka RegisterFrame dan tutup LoginFrame ini
         new RegisterFrame().setVisible(true);
         this.dispose();
     }
 
-    // Main method utama aplikasi sekarang dipindah ke sini
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new LoginFrame().setVisible(true);

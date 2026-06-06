@@ -1,7 +1,11 @@
 package view.frame;
 
+import view.panel.mahasiswa.DashboardMahasiswaPanel;
+import view.panel.mahasiswa.FormKeluhanPanel;
+import view.panel.mahasiswa.RiwayatKeluhanPanel;
 import javax.swing.*;
 import java.awt.*;
+import utils.UserSession;
 
 public class MainMahasiswaFrame extends JFrame {
 
@@ -16,15 +20,14 @@ public class MainMahasiswaFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // ==========================================
-        // 1. SIDEBAR KIRI (Menu Navigasi)
-        // ==========================================
+
+        //Design left Sidebar
         JPanel sidebarPanel = new JPanel();
         sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
         sidebarPanel.setBackground(Color.BLACK);
         sidebarPanel.setPreferredSize(new Dimension(220, 0));
 
-        // Judul Sidebar
+        //Title Frame
         JLabel lblMenu = new JLabel("MENU MAHASISWA");
         lblMenu.setForeground(Color.WHITE);
         lblMenu.setFont(new Font("Arial", Font.BOLD, 16));
@@ -53,23 +56,26 @@ public class MainMahasiswaFrame extends JFrame {
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
 
-        // TODO: Nanti ganti createDummyPanel dengan class Panel lu yang asli
-        // Contoh nanti: mainContentPanel.add(new DashboardMahasiswaPanel(), "Dashboard");
-        mainContentPanel.add(createDummyPanel("Ini Halaman Dashboard"), "Dashboard");
-        mainContentPanel.add(createDummyPanel("Ini Halaman Form Keluhan"), "BuatKeluhan");
-        mainContentPanel.add(createDummyPanel("Ini Halaman Riwayat Keluhan"), "Riwayat");
+        //Action panel
+        mainContentPanel.add(new DashboardMahasiswaPanel(), "Dashboard");    
+        mainContentPanel.add(new FormKeluhanPanel(), "BuatKeluhan");
+        mainContentPanel.add(new RiwayatKeluhanPanel(UserSession.getUser()), "Riwayat");
 
         // Memasukkan Sidebar dan Main Content ke Frame Utama
         add(sidebarPanel, BorderLayout.WEST);
         add(mainContentPanel, BorderLayout.CENTER);
 
-        // ==========================================
-        // 3. LOGIKA PINDAH HALAMAN (Event Listener)
-        // ==========================================
+
+        //Panel Dashboard
         btnDashboard.addActionListener(e -> cardLayout.show(mainContentPanel, "Dashboard"));
+
+        //Panel Form keluhan
         btnBuatKeluhan.addActionListener(e -> cardLayout.show(mainContentPanel, "BuatKeluhan"));
+
+        //Panel riwayat keluhan
         btnRiwayat.addActionListener(e -> cardLayout.show(mainContentPanel, "Riwayat"));
-        
+
+        //Panel Logout
         btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
