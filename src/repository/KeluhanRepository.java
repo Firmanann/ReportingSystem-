@@ -93,6 +93,33 @@ public class KeluhanRepository {
         return count;
     }
     
+    public int countKeluhanByNim(String status, String nim) {
+        int count = 0;
+        // Jika status "TOTAL", hitung semua milik NIM tersebut. Jika bukan, filter berdasarkan status.
+        String sql = status.equals("TOTAL") ? 
+                     "SELECT COUNT(*) FROM keluhan WHERE nim = ?" : 
+                     "SELECT COUNT(*) FROM keluhan WHERE status_keluhan = ? AND nim = ?";
+                     
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             
+            if (status.equals("TOTAL")) {
+                ps.setString(1, nim);
+            } else {
+                ps.setString(1, status);
+                ps.setString(2, nim);
+            }
+            
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
 
     public Keluhan findById(long idKeluhan) { 
 

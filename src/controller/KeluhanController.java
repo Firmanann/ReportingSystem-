@@ -9,7 +9,18 @@ public class KeluhanController {
     
     KeluhanRepository repoKeluhan = new KeluhanRepository();
     
-    //Get total keluhan 
+    //Get total keluhan mahasiswa
+    public int getTotalStatus(String nim) {
+        return repoKeluhan.countKeluhanByNim("TOTAL", nim);
+    }
+    public int getDiprosesStatus(String nim) {
+        return repoKeluhan.countKeluhanByNim("DIPROSES", nim);
+    }
+    public int getSelesaiStatus(String nim) {
+        return repoKeluhan.countKeluhanByNim("SELESAI", nim);
+    }
+    
+    //Get total keluhan Petugas
     public int getTotalStatus() {
         return repoKeluhan.countSemuaKeluhan("TOTAL");
     }

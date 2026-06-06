@@ -11,6 +11,10 @@ public class MainMahasiswaFrame extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel mainContentPanel;
+    
+    // Deklarasi variabel panel di sini
+    private RiwayatKeluhanPanel panelRiwayat;
+    private DashboardMahasiswaPanel panelDashboard;
 
     public MainMahasiswaFrame() {
         // Setup Dasar Frame
@@ -19,7 +23,6 @@ public class MainMahasiswaFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
 
         //Design left Sidebar
         JPanel sidebarPanel = new JPanel();
@@ -49,30 +52,40 @@ public class MainMahasiswaFrame extends JFrame {
         sidebarPanel.add(btnLogout);
         sidebarPanel.add(Box.createVerticalStrut(20)); // Jarak bawah
 
-
         //Main content 
         cardLayout = new CardLayout();
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
+        
+        // --- FIX NYA DI SINI ---
+        // 1. Inisialisasi panel ke dalam variabel
+        panelDashboard = new DashboardMahasiswaPanel();
+        panelRiwayat = new RiwayatKeluhanPanel(UserSession.getUser());
 
-        //Action panel
-        mainContentPanel.add(new DashboardMahasiswaPanel(), "Dashboard");    
-        mainContentPanel.add(new FormKeluhanPanel(), "BuatKeluhan");
-        mainContentPanel.add(new RiwayatKeluhanPanel(UserSession.getUser()), "Riwayat");
+        // 2. Masukkan panel pakai variabel (JANGAN pakai 'new' lagi buat yang udah ada variabelnya)
+        mainContentPanel.add(panelDashboard, "Dashboard");    
+        mainContentPanel.add(new FormKeluhanPanel(), "BuatKeluhan"); 
+        mainContentPanel.add(panelRiwayat, "Riwayat");
+        // -----------------------
 
         // Memasukkan Sidebar dan Main Content ke Frame Utama
         add(sidebarPanel, BorderLayout.WEST);
         add(mainContentPanel, BorderLayout.CENTER);
 
-
         //Panel Dashboard
-        btnDashboard.addActionListener(e -> cardLayout.show(mainContentPanel, "Dashboard"));
+        btnDashboard.addActionListener(e -> {
+            panelDashboard.loadData(); // Tarik data terbaru buat angka total
+            cardLayout.show(mainContentPanel, "Dashboard");
+        });
 
         //Panel Form keluhan
         btnBuatKeluhan.addActionListener(e -> cardLayout.show(mainContentPanel, "BuatKeluhan"));
 
         //Panel riwayat keluhan
-        btnRiwayat.addActionListener(e -> cardLayout.show(mainContentPanel, "Riwayat"));
+        btnRiwayat.addActionListener(e -> {
+            panelRiwayat.loadData(); // Tarik data terbaru buat tabel
+            cardLayout.show(mainContentPanel, "Riwayat");
+        });
 
         //Panel Logout
         btnLogout.addActionListener(e -> {
@@ -96,5 +109,4 @@ public class MainMahasiswaFrame extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
-
 }

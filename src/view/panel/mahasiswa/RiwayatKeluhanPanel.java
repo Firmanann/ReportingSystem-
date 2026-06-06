@@ -56,7 +56,7 @@ public class RiwayatKeluhanPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    private void loadData() {
+    public void loadData() {
         // Kosongkan tabel sebelum diisi ulang
         tableModel.setRowCount(0);
 
