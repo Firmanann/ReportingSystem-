@@ -12,17 +12,14 @@ import java.util.List;
 public class KeluhanRepository {
 
     public boolean save(Keluhan keluhan) {
-
         String sql = """
                 INSERT INTO keluhan
                 (nim, id_kategori, isi_keluhan, tanggal_pengaduan, status_keluhan)
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, keluhan.getMahasiswa().getNim());
             ps.setLong(2, keluhan.getKategori().getIdKategori()); 
@@ -35,22 +32,18 @@ public class KeluhanRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
 
     public boolean updateStatus(long idKeluhan, String status) { 
-
         String sql = """
                 UPDATE keluhan
                 SET status_keluhan = ?
                 WHERE id_keluhan = ?
                 """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, status);
             ps.setLong(2, idKeluhan); 
@@ -60,11 +53,10 @@ public class KeluhanRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return false;
     }
     
-    // Method khusus untuk menghitung jumlah berdasarkan status
+    // Method khusus untuk menghitung jumlah semua keluhan (buat Petugas)
     public int countSemuaKeluhan(String status) {
         int count = 0;
         String sql = "";
@@ -93,17 +85,18 @@ public class KeluhanRepository {
         return count;
     }
     
+    // Method khusus untuk menghitung jumlah keluhan berdasarkan NIM (buat Mahasiswa)
     public int countKeluhanByNim(String status, String nim) {
         int count = 0;
-        // Jika status "TOTAL", hitung semua milik NIM tersebut. Jika bukan, filter berdasarkan status.
-        String sql = status.equals("TOTAL") ? 
+        
+        String sql = status.equalsIgnoreCase("TOTAL") ? 
                      "SELECT COUNT(*) FROM keluhan WHERE nim = ?" : 
                      "SELECT COUNT(*) FROM keluhan WHERE status_keluhan = ? AND nim = ?";
                      
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
              
-            if (status.equals("TOTAL")) {
+            if (status.equalsIgnoreCase("TOTAL")) {
                 ps.setString(1, nim);
             } else {
                 ps.setString(1, status);
@@ -119,10 +112,9 @@ public class KeluhanRepository {
         }
         return count;
     }
-    
 
+    // Method mencari keluhan berdasarkan ID (Buat dipakai petugas ngasih tanggapan)
     public Keluhan findById(long idKeluhan) { 
-
         String sql = """
                 SELECT k.*,
                        m.nama_mahasiswa,
@@ -132,20 +124,17 @@ public class KeluhanRepository {
                        kat.nama_kategori,
                        kat.keterangan
                 FROM keluhan k
-                JOIN mahasiswa m
+                LEFT JOIN mahasiswa m
                     ON k.nim = m.nim
-                JOIN kategori kat
+                LEFT JOIN kategori kat
                     ON k.id_kategori = kat.id_kategori
                 WHERE k.id_keluhan = ?
                 """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setLong(1, idKeluhan); 
-
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -155,12 +144,10 @@ public class KeluhanRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     public List<Keluhan> findAll() {
-
         List<Keluhan> keluhanList = new ArrayList<>();
 
         String sql = """
@@ -172,18 +159,16 @@ public class KeluhanRepository {
                        kat.nama_kategori, 
                        kat.keterangan 
                 FROM keluhan k 
-                LEFT JOIN mahasiswa m -- Ganti jadi LEFT JOIN
+                LEFT JOIN mahasiswa m
                     ON k.nim = m.nim 
-                LEFT JOIN kategori kat -- Ganti jadi LEFT JOIN
+                LEFT JOIN kategori kat
                     ON k.id_kategori = kat.id_kategori 
                 ORDER BY k.tanggal_pengaduan DESC
                 """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()
-        ) {
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 keluhanList.add(mapResultSetToKeluhan(rs));
@@ -192,12 +177,10 @@ public class KeluhanRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return keluhanList;
     }
 
     public List<Keluhan> findByMahasiswa(String nim) {
-
         List<Keluhan> keluhanList = new ArrayList<>();
 
         String sql = """
@@ -208,22 +191,19 @@ public class KeluhanRepository {
                        m.email_mahasiswa,
                        kat.nama_kategori,
                        kat.keterangan
-                FROM keluhan k -- Hapus tb_
-                JOIN mahasiswa m -- Hapus tb_
+                FROM keluhan k 
+                LEFT JOIN mahasiswa m 
                     ON k.nim = m.nim
-                JOIN kategori kat -- Hapus tb_
+                LEFT JOIN kategori kat 
                     ON k.id_kategori = kat.id_kategori
                 WHERE k.nim = ?
                 ORDER BY k.tanggal_pengaduan DESC
                 """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        try (Connection conn = Koneksi.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, nim);
-
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -233,13 +213,10 @@ public class KeluhanRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return keluhanList;
     }
 
-    private Keluhan mapResultSetToKeluhan(ResultSet rs)
-            throws SQLException {
-
+    private Keluhan mapResultSetToKeluhan(ResultSet rs) throws SQLException {
         Mahasiswa mahasiswa = new Mahasiswa();
         mahasiswa.setNim(rs.getString("nim"));
         mahasiswa.setNama(rs.getString("nama_mahasiswa")); 

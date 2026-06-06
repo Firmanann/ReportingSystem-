@@ -24,9 +24,9 @@ public class TanggapanController {
             keluhan.setIdKeluhan(idKeluhan);
 
             // 3. Bungkus objek Petugas 
-            // (Sesuaikan id_petugas ini dengan ID petugas yang sedang login dari UserSession lu)
+            // (Nanti jangan lupa id_petugas ini dinamis ngambil dari UserSession ya)
             Petugas petugas = new Petugas();
-            petugas.setIdPetugas(1); // Sementara di-hardcode ID 1, nanti sesuaikan
+            petugas.setIdPetugas(1); 
 
             // 4. Rakit objek Tanggapan secara utuh
             Tanggapan tanggapan = new Tanggapan();
@@ -34,9 +34,20 @@ public class TanggapanController {
             tanggapan.setPetugas(petugas);
             tanggapan.setIsiTanggapan(isiTanggapan);
             tanggapan.setTanggalTanggapan(new Timestamp(System.currentTimeMillis())); // Waktu saat ini
+            
+            // 5. Eksekusi simpan tanggapan
+            boolean isTanggapanSaved = tanggapanRepo.save(tanggapan);
 
-            // 5. Kirim ke Repo untuk eksekusi transaksi database
-            return tanggapanRepo.save(tanggapan);
+            // --- 6. FIX NYA DI SINI: UPDATE STATUS KELUHAN JADI "selesai" ---
+            if (isTanggapanSaved) {
+                // Panggil repo keluhan buat ubah statusnya
+                repository.KeluhanRepository keluhanRepo = new repository.KeluhanRepository();
+                
+                // Return true jika update status berhasil (pakai huruf kecil sesuai constraint DB)
+                return keluhanRepo.updateStatus(idKeluhan, "selesai"); 
+            }
+
+            return false;
 
         } catch (NumberFormatException e) {
             e.printStackTrace();

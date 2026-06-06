@@ -11,6 +11,11 @@ public class MainPetugasFrame extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel mainContentPanel;
+    
+    // --- FIX NYA DI SINI: Deklarasi variabel global buat panel ---
+    private DashboardPetugasPanel panelDashboard;
+    private DataKeluhanPanel panelDataKeluhan;
+    private KategoriPanel panelKategori;
 
     public MainPetugasFrame() {
         
@@ -34,7 +39,7 @@ public class MainPetugasFrame extends JFrame {
         lblMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblMenu.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
 
-        // Tombol Menu Utama (Cuma 3 Sesuai Permintaan)
+        // Tombol Menu Utama
         JButton btnDashboard = createMenuButton("Dashboard");
         JButton btnDataKeluhan = createMenuButton("Data Keluhan");
         JButton btnKategori = createMenuButton("Kelola Kategori");
@@ -54,18 +59,34 @@ public class MainPetugasFrame extends JFrame {
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
 
-        // Masukkan Panel Utama (Perhatikan parameter 'this' pada DataKeluhanPanel)
-        mainContentPanel.add(new DashboardPetugasPanel(), "Dashboard");
-        mainContentPanel.add(new DataKeluhanPanel(this), "DataKeluhan"); 
-        mainContentPanel.add(new KategoriPanel(), "Kategori");
+        // --- FIX NYA DI SINI: Inisialisasi ke dalam variabel ---
+        panelDashboard = new DashboardPetugasPanel();
+        panelDataKeluhan = new DataKeluhanPanel(this);
+        panelKategori = new KategoriPanel();
+
+        // Masukkan Panel Utama pakai variabelnya
+        mainContentPanel.add(panelDashboard, "Dashboard");
+        mainContentPanel.add(panelDataKeluhan, "DataKeluhan"); 
+        mainContentPanel.add(panelKategori, "Kategori");
 
         add(sidebarPanel, BorderLayout.WEST);
         add(mainContentPanel, BorderLayout.CENTER);
 
-        // Next Page logic 
-        btnDashboard.addActionListener(e -> cardLayout.show(mainContentPanel, "Dashboard"));
-        btnDataKeluhan.addActionListener(e -> cardLayout.show(mainContentPanel, "DataKeluhan"));
-        btnKategori.addActionListener(e -> cardLayout.show(mainContentPanel, "Kategori"));
+        // --- FIX NYA DI SINI: Update Action Listener biar narik data dulu sebelum pindah ---
+        btnDashboard.addActionListener(e -> {
+            panelDashboard.loadData(); // Biar angka kotak-kotak petugas ikut update
+            cardLayout.show(mainContentPanel, "Dashboard");
+        });
+        
+        btnDataKeluhan.addActionListener(e -> {
+            panelDataKeluhan.loadData(); // Biar tabel update saat pindah dari menu lain
+            cardLayout.show(mainContentPanel, "DataKeluhan");
+        });
+        
+        btnKategori.addActionListener(e -> {
+            // Nanti lu bisa tambahin method loadData() juga di KategoriPanel
+            cardLayout.show(mainContentPanel, "Kategori");
+        });
         
         btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -76,12 +97,9 @@ public class MainPetugasFrame extends JFrame {
         });
     }
 
-    // Method KHUSUS untuk pindah ke Panel Tanggapan (Dipanggil dari DataKeluhanPanel)
+    // Method KHUSUS untuk pindah ke Panel Tanggapan
     public void bukaPanelTanggapan(String idKeluhan) {
-
-        
         // Buat panel tanggapan baru dengan ID spesifik
-        // Nanti ganti createDummyPanel dengan 'new TanggapanPanel(idKeluhan)' kalau udah lu buat class-nya
         TanggapanPanel panelTanggapan = new TanggapanPanel(this, idKeluhan);        
         panelTanggapan.setName("Tanggapan"); // Beri nama untuk identifikasi
 
@@ -89,8 +107,11 @@ public class MainPetugasFrame extends JFrame {
         cardLayout.show(mainContentPanel, "Tanggapan");
     }
     
-    // Method untuk balik ke halaman Data Keluhan
+    // Method untuk balik ke halaman Data Keluhan setelah ngasih tanggapan
     public void kembaliKeDataKeluhan() {
+        // --- FIX NYA DI SINI: Refresh tabel dulu sebelum layar dibalik ---
+        panelDataKeluhan.loadData(); 
+        
         cardLayout.show(mainContentPanel, "DataKeluhan");
     }
 

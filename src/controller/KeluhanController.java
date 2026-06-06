@@ -11,24 +11,30 @@ public class KeluhanController {
     
     //Get total keluhan mahasiswa
     public int getTotalStatus(String nim) {
-        return repoKeluhan.countKeluhanByNim("TOTAL", nim);
+        return repoKeluhan.countKeluhanByNim("total", nim);
     }
     public int getDiprosesStatus(String nim) {
-        return repoKeluhan.countKeluhanByNim("DIPROSES", nim);
+        return repoKeluhan.countKeluhanByNim("menunggu", nim);
     }
     public int getSelesaiStatus(String nim) {
-        return repoKeluhan.countKeluhanByNim("SELESAI", nim);
+        return repoKeluhan.countKeluhanByNim("selesai", nim);
     }
     
     //Get total keluhan Petugas
+// Get total keluhan Petugas
     public int getTotalStatus() {
-        return repoKeluhan.countSemuaKeluhan("TOTAL");
+        return repoKeluhan.countSemuaKeluhan("total");
     }
+    
     public int getDiprosesStatus() {
-        return repoKeluhan.countSemuaKeluhan("DIPROSES");
+        // Gabungin hitungan 'menunggu' dan 'diproses' biar gak ada data yang ilang dari dashboard
+        int menunggu = repoKeluhan.countSemuaKeluhan("menunggu");
+        int diproses = repoKeluhan.countSemuaKeluhan("diproses");
+        return menunggu + diproses;
     }
+    
     public int getSelesaiStatus() {
-        return repoKeluhan.countSemuaKeluhan("SELESAI");
+        return repoKeluhan.countSemuaKeluhan("selesai");
     }
     
 

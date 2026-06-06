@@ -93,16 +93,15 @@ public class LoginFrame extends JFrame {
         
         //3. Mapping to next page
         if (role.equals("MAHASISWA")) {
-
-            //Set data user session
-            user.setUser(username);
-
-            //Start main mahasiswa frame
-            new MainMahasiswaFrame().setVisible(true);
-
-            //Stop this frame
-            this.dispose();
-
+            
+        //Set session
+        UserSession.setUser(username); // atau variabel yg nyimpen nim
+        
+        //create new frame
+        MainMahasiswaFrame mhsFrame = new MainMahasiswaFrame();
+        mhsFrame.setVisible(true);
+        
+        this.dispose();
         } else if (role.equals("PETUGAS")) {
 
             //Set data user session

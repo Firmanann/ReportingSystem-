@@ -79,17 +79,17 @@ public class TanggapanPanel extends JPanel {
         add(formPanel, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);
  
-        // Tombol Kembali: Balik ke halaman Data Keluhan
+        // Tombol Kembali: Balik ke halaman Data Keluhan tanpa ngapa-ngapain
         btnKembali.addActionListener(e -> {
             mainFrame.kembaliKeDataKeluhan();
         });
         
-        
         TanggapanController tanggapanController = new TanggapanController();
 
-        // Tombol Kirim: Nanti hubungkan ke Controller
+        // Tombol Kirim: Eksekusi simpan dan update
         btnKirim.addActionListener(e -> {
             String isi = txtTanggapan.getText();
+            
             if (isi.trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Tanggapan tidak boleh kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -99,14 +99,14 @@ public class TanggapanPanel extends JPanel {
             boolean sukses = tanggapanController.kirimTanggapan(idKeluhan, isi);
             
             if (sukses) {
-                JOptionPane.showMessageDialog(this, "Tanggapan berhasil dikirim dan status keluhan diupdate jadi SELESAI!");
-                mainFrame.kembaliKeDataKeluhan(); // Balik ke tabel utama
+                // Munculin notif sukses dulu
+                JOptionPane.showMessageDialog(this, "Tanggapan berhasil dikirim dan status diperbarui!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                
+                // Baru balik ke tabel utama
+                mainFrame.kembaliKeDataKeluhan(); 
             } else {
                 JOptionPane.showMessageDialog(this, "Gagal mengirim tanggapan. Terjadi kesalahan sistem.", "Error", JOptionPane.ERROR_MESSAGE);
             }
-                        
-            // Balik ke halaman data keluhan setelah sukses
-            mainFrame.kembaliKeDataKeluhan();
         });
     }
 

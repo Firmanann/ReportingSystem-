@@ -50,7 +50,7 @@ public class DashboardMahasiswaPanel extends JPanel {
 
         // Masukkan label global ke dalam kartu pembantu
         cardsPanel.add(createStatCard("Total Keluhan", lblTotal));
-        cardsPanel.add(createStatCard("Sedang Diproses", lblDiproses));
+        cardsPanel.add(createStatCard("Menunggu", lblDiproses));
         cardsPanel.add(createStatCard("Selesai", lblSelesai));
 
         // Memasukkan header dan kartu ke dalam Panel utama
