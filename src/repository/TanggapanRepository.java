@@ -12,29 +12,63 @@ import java.util.List;
 public class TanggapanRepository {
 
     public boolean save(Tanggapan tanggapan) {
-
-        String sql = """
-                INSERT INTO tanggapan
-                (id_keluhan, id_petugas, isi_tanggapan, tanggal_tanggapan)
+        String insertTanggapan = """
+                INSERT INTO tanggapan (id_keluhan, id_petugas, isi_tanggapan, tanggal_tanggapan)
                 VALUES (?, ?, ?, ?)
                 """;
+                
+        String updateKeluhan = """
+                UPDATE keluhan SET status_keluhan = 'SELESAI' WHERE id_keluhan = ?
+                """;
 
-        try (
-                Connection conn = Koneksi.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql)
-        ) {
+        Connection conn = null;
+        try {
+            conn = Koneksi.getConnection();
+            
+            // 1. Matikan auto-commit untuk memulai transaksi
+            conn.setAutoCommit(false); 
 
-            ps.setLong(1, tanggapan.getKeluhan().getIdKeluhan()); 
-            ps.setLong(2, tanggapan.getPetugas().getIdPetugas()); 
-            ps.setString(3, tanggapan.getIsiTanggapan());
-            ps.setTimestamp(4, tanggapan.getTanggalTanggapan());
+            // 2. Eksekusi Query Insert Tanggapan
+            try (PreparedStatement psInsert = conn.prepareStatement(insertTanggapan)) {
+                psInsert.setLong(1, tanggapan.getKeluhan().getIdKeluhan()); 
+                psInsert.setLong(2, tanggapan.getPetugas().getIdPetugas()); 
+                psInsert.setString(3, tanggapan.getIsiTanggapan());
+                psInsert.setTimestamp(4, tanggapan.getTanggalTanggapan());
+                psInsert.executeUpdate();
+            }
 
-            return ps.executeUpdate() > 0;
+            // 3. Eksekusi Query Update Status Keluhan
+            try (PreparedStatement psUpdate = conn.prepareStatement(updateKeluhan)) {
+                psUpdate.setLong(1, tanggapan.getKeluhan().getIdKeluhan());
+                psUpdate.executeUpdate();
+            }
+
+            // 4. Jika kedua query sukses, simpan perubahan permanen ke database
+            conn.commit(); 
+            return true;
 
         } catch (SQLException e) {
+            // 5. Jika terjadi error di salah satu proses, batalkan SEMUANYA
+            if (conn != null) {
+                try {
+                    conn.rollback(); 
+                    System.out.println("Transaksi gagal, melakukan rollback data...");
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
             e.printStackTrace();
+        } finally {
+            // 6. Kembalikan setting koneksi ke semula dan tutup
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
-
         return false;
     }
 

@@ -65,34 +65,34 @@ public class KeluhanRepository {
     }
     
     // Method khusus untuk menghitung jumlah berdasarkan status
-    public int countKeluhanByStatus(String nim, String status) {
+    public int countSemuaKeluhan(String status) {
         int count = 0;
         String sql = "";
-        
-        // Jika status "Total", hitung semua. Jika bukan, hitung sesuai status.
-        if (status.equals("Total")) {
-            sql = "SELECT COUNT(*) FROM keluhan WHERE nim = ?";
+
+        if (status.equalsIgnoreCase("Total")) {
+            sql = "SELECT COUNT(*) FROM keluhan";
         } else {
-            sql = "SELECT COUNT(*) FROM keluhan WHERE nim = ? AND status_keluhan = ?";
+            sql = "SELECT COUNT(*) FROM keluhan WHERE status_keluhan = ?";
         }
 
         try (Connection conn = Koneksi.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, nim);
-            if (!status.equals("Total")) {
-                ps.setString(2, status);
+            if (!status.equalsIgnoreCase("Total")) {
+                ps.setString(1, status);
             }
 
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                count = rs.getInt(1);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return count;
     }
+    
 
     public Keluhan findById(long idKeluhan) { 
 
@@ -137,18 +137,18 @@ public class KeluhanRepository {
         List<Keluhan> keluhanList = new ArrayList<>();
 
         String sql = """
-                SELECT k.*,
-                       m.nama_mahasiswa,
-                       m.prodi,
-                       m.no_hp,
-                       m.email_mahasiswa,
-                       kat.nama_kategori,
-                       kat.keterangan
-                FROM keluhan k
-                JOIN mahasiswa m -- Hapus tb_
-                    ON k.nim = m.nim
-                JOIN kategori kat -- Hapus tb_
-                    ON k.id_kategori = kat.id_kategori
+                SELECT k.*, 
+                       m.nama_mahasiswa, 
+                       m.prodi, 
+                       m.no_hp, 
+                       m.email_mahasiswa, 
+                       kat.nama_kategori, 
+                       kat.keterangan 
+                FROM keluhan k 
+                LEFT JOIN mahasiswa m -- Ganti jadi LEFT JOIN
+                    ON k.nim = m.nim 
+                LEFT JOIN kategori kat -- Ganti jadi LEFT JOIN
+                    ON k.id_kategori = kat.id_kategori 
                 ORDER BY k.tanggal_pengaduan DESC
                 """;
 

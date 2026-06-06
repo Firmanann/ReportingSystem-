@@ -49,9 +49,8 @@ public class MainMahasiswaFrame extends JFrame {
         sidebarPanel.add(btnLogout);
         sidebarPanel.add(Box.createVerticalStrut(20)); // Jarak bawah
 
-        // ==========================================
-        // 2. MAIN CONTENT TENGAH (Wadah Panel)
-        // ==========================================
+
+        //Main content 
         cardLayout = new CardLayout();
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
@@ -98,19 +97,4 @@ public class MainMahasiswaFrame extends JFrame {
         return btn;
     }
 
-    // Method pembantu sementara (Dummy Panel) sebelum lu buat class Panel aslinya
-    private JPanel createDummyPanel(String text) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 24));
-        panel.add(label);
-        return panel;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainMahasiswaFrame().setVisible(true);
-        });
-    }
 }

@@ -2,6 +2,10 @@ package view.frame;
 
 import javax.swing.*;
 import java.awt.*;
+import view.panel.petugas.DashboardPetugasPanel;
+import view.panel.petugas.DataKeluhanPanel;
+import view.panel.petugas.TanggapanPanel;
+import view.panel.petugas.KategoriPanel;
 
 public class MainPetugasFrame extends JFrame {
 
@@ -9,6 +13,7 @@ public class MainPetugasFrame extends JFrame {
     private JPanel mainContentPanel;
 
     public MainPetugasFrame() {
+        
         // Setup Dasar Frame
         setTitle("Reporting System - Petugas / Admin");
         setSize(900, 600);
@@ -16,9 +21,7 @@ public class MainPetugasFrame extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // ==========================================
-        // 1. SIDEBAR KIRI (Menu Navigasi Petugas)
-        // ==========================================
+        // Navigation on leftsidebar
         JPanel sidebarPanel = new JPanel();
         sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
         sidebarPanel.setBackground(Color.BLACK);
@@ -31,7 +34,7 @@ public class MainPetugasFrame extends JFrame {
         lblMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblMenu.setBorder(BorderFactory.createEmptyBorder(20, 0, 30, 0));
 
-        // Tombol Menu
+        // Tombol Menu Utama (Cuma 3 Sesuai Permintaan)
         JButton btnDashboard = createMenuButton("Dashboard");
         JButton btnDataKeluhan = createMenuButton("Data Keluhan");
         JButton btnKategori = createMenuButton("Kelola Kategori");
@@ -46,24 +49,20 @@ public class MainPetugasFrame extends JFrame {
         sidebarPanel.add(btnLogout);
         sidebarPanel.add(Box.createVerticalStrut(20)); 
 
-        // ==========================================
-        // 2. MAIN CONTENT TENGAH (Wadah Panel)
-        // ==========================================
+        // Main content
         cardLayout = new CardLayout();
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
 
-        // Dummy Panel sementara sebelum class Panel asli dibuat
-        mainContentPanel.add(createDummyPanel("Dashboard Petugas"), "Dashboard");
-        mainContentPanel.add(createDummyPanel("Manajemen Data Keluhan"), "DataKeluhan");
-        mainContentPanel.add(createDummyPanel("Manajemen Kategori"), "Kategori");
+        // Masukkan Panel Utama (Perhatikan parameter 'this' pada DataKeluhanPanel)
+        mainContentPanel.add(new DashboardPetugasPanel(), "Dashboard");
+        mainContentPanel.add(new DataKeluhanPanel(this), "DataKeluhan"); 
+        mainContentPanel.add(new KategoriPanel(), "Kategori");
 
         add(sidebarPanel, BorderLayout.WEST);
         add(mainContentPanel, BorderLayout.CENTER);
 
-        // ==========================================
-        // 3. LOGIKA PINDAH HALAMAN
-        // ==========================================
+        // Next Page logic 
         btnDashboard.addActionListener(e -> cardLayout.show(mainContentPanel, "Dashboard"));
         btnDataKeluhan.addActionListener(e -> cardLayout.show(mainContentPanel, "DataKeluhan"));
         btnKategori.addActionListener(e -> cardLayout.show(mainContentPanel, "Kategori"));
@@ -71,10 +70,28 @@ public class MainPetugasFrame extends JFrame {
         btnLogout.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(this, "Yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
-                new LoginFrame().setVisible(true);
+                new LoginFrame().setVisible(true); 
                 this.dispose();
             }
         });
+    }
+
+    // Method KHUSUS untuk pindah ke Panel Tanggapan (Dipanggil dari DataKeluhanPanel)
+    public void bukaPanelTanggapan(String idKeluhan) {
+
+        
+        // Buat panel tanggapan baru dengan ID spesifik
+        // Nanti ganti createDummyPanel dengan 'new TanggapanPanel(idKeluhan)' kalau udah lu buat class-nya
+        TanggapanPanel panelTanggapan = new TanggapanPanel(this, idKeluhan);        
+        panelTanggapan.setName("Tanggapan"); // Beri nama untuk identifikasi
+
+        mainContentPanel.add(panelTanggapan, "Tanggapan");
+        cardLayout.show(mainContentPanel, "Tanggapan");
+    }
+    
+    // Method untuk balik ke halaman Data Keluhan
+    public void kembaliKeDataKeluhan() {
+        cardLayout.show(mainContentPanel, "DataKeluhan");
     }
 
     // Method pembuat tombol biar desain seragam (Hitam Putih)
@@ -88,21 +105,5 @@ public class MainPetugasFrame extends JFrame {
         btn.setBorderPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
-    }
-
-    // Method pembantu dummy panel
-    private JPanel createDummyPanel(String text) {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 24));
-        panel.add(label);
-        return panel;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new MainPetugasFrame().setVisible(true);
-        });
     }
 }

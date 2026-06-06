@@ -1,4 +1,4 @@
-package view.panel.mahasiswa;
+package view.panel.petugas;
 
 import controller.KeluhanController;
 import utils.UserSession;
@@ -7,18 +7,19 @@ import javax.swing.*;
 import java.awt.*;
 
 //Connected to Controller - Model 
-public class DashboardMahasiswaPanel extends JPanel {
+public class DashboardPetugasPanel extends JPanel {
 
-    public DashboardMahasiswaPanel() {
+    public DashboardPetugasPanel() {
         // Setup dasar Panel (Putih bersih)
         setBackground(Color.WHITE);
         setLayout(new BorderLayout(20, 20));
         setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        
         // 1. Bagian Header (Judul Halaman)
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
         
-        JLabel lblWelcome = new JLabel("Dashboard Mahasiswa");
+        JLabel lblWelcome = new JLabel("Dashboard Petugas");
         lblWelcome.setFont(new Font("Arial", Font.BOLD, 28));
         lblWelcome.setForeground(Color.BLACK);
         

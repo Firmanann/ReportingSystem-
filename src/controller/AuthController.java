@@ -32,13 +32,13 @@ public class AuthController {
     
     public String login(String username, String password){
         
-        //validate existing data mahasiswa 
+        //validate existing data mahasiswa (mahasiswa using nim to login)
         Mahasiswa mahasiswa = repoMahasiswa.login(username, password);
         if (mahasiswa != null){
             return "MAHASISWA";
         }
         
-        //Validate existing data petugas 
+        //Validate existing data petugas (petugas using email to login)
         Petugas petugas = repoPetugas.login(username, password);
         if(petugas != null){
             return "PETUGAS";

@@ -9,17 +9,17 @@ public class KeluhanController {
     
     KeluhanRepository repoKeluhan = new KeluhanRepository();
     
-    public int getTotalStatus(String nim){
-        return repoKeluhan.countKeluhanByStatus(nim, "TOTAL");
+    //Get total keluhan 
+    public int getTotalStatus() {
+        return repoKeluhan.countSemuaKeluhan("TOTAL");
+    }
+    public int getDiprosesStatus() {
+        return repoKeluhan.countSemuaKeluhan("DIPROSES");
+    }
+    public int getSelesaiStatus() {
+        return repoKeluhan.countSemuaKeluhan("SELESAI");
     }
     
-    public int getDiprosesStatus(String nim){
-        return repoKeluhan.countKeluhanByStatus(nim, "DIPROSES");
-    }
-    
-    public int getSelesaiStatus(String nim){
-        return repoKeluhan.countKeluhanByStatus(nim, "SELESAI");
-    }
 
     public boolean saveKeluhan(Keluhan keluhan){
        
@@ -29,8 +29,14 @@ public class KeluhanController {
         return true;
     }
     
+    //Get riwayat keluhan 
     public List<Keluhan> historyKeluhan(String nim) {
             return repoKeluhan.findByMahasiswa(nim);
-        }
+    }
+    
+    //Data keluhan 
+    public List<Keluhan> getAllKeluhan() {
+        return repoKeluhan.findAll();
+    }
     
 }
