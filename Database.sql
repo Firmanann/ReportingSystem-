@@ -1,6 +1,6 @@
 -- Database
-CREATE DATABASE ReportingSystem;
-USE ReportingSystem;
+CREATE DATABASE sipekan;
+USE sipekan;
 
 -- Mahasiswa
 CREATE TABLE mahasiswa (

@@ -1,7 +1,7 @@
 package view.panel.petugas;
 
 import controller.KategoriController;
-import model.Kategori;
+import Entity.Kategori;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -31,7 +31,7 @@ public class KategoriPanel extends JPanel {
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // --- 1. HEADER ---
+        //Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
         JLabel lblTitle = new JLabel("Kelola Kategori Keluhan");
@@ -41,11 +41,11 @@ public class KategoriPanel extends JPanel {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         headerPanel.add(lblSub, BorderLayout.SOUTH);
 
-        // --- 2. MAIN CONTENT (GRID 1x2) ---
+        //MAIN CONTENT 
         JPanel mainContent = new JPanel(new GridLayout(1, 2, 20, 0));
         mainContent.setBackground(Color.WHITE);
 
-        // --- A. FORM PANEL (KIRI) ---
+        //FORM PANEL (KIRI)
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
@@ -85,7 +85,7 @@ public class KategoriPanel extends JPanel {
         formPanel.add(pnlKet);
         formPanel.add(btnPanel);
 
-        // --- B. TABLE PANEL (KANAN) ---
+        //table kanan 
         String[] columns = {"ID", "Nama Kategori", "Keterangan"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -103,9 +103,8 @@ public class KategoriPanel extends JPanel {
         add(headerPanel, BorderLayout.NORTH);
         add(mainContent, BorderLayout.CENTER);
 
-        // --- 3. EVENT LISTENERS ---
         
-        // Klik Tabel -> Pindah ke Form
+        // Klik Tabel - Pindah ke Form
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -167,7 +166,7 @@ public class KategoriPanel extends JPanel {
         table.clearSelection();
     }
 
-    // --- Helper Methods untuk UI ---
+    //  UI 
     private JPanel createInputGroup(String label) {
         JPanel p = new JPanel(new BorderLayout(0, 5));
         p.setBackground(Color.WHITE);

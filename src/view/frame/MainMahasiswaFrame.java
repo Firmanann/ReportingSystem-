@@ -11,12 +11,11 @@ public class MainMahasiswaFrame extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel mainContentPanel;
-    
-    // Deklarasi variabel panel di sini
     private RiwayatKeluhanPanel panelRiwayat;
     private DashboardMahasiswaPanel panelDashboard;
 
     public MainMahasiswaFrame() {
+        
         // Setup Dasar Frame
         setTitle("Reporting System - Mahasiswa");
         setSize(900, 600);
@@ -43,32 +42,30 @@ public class MainMahasiswaFrame extends JFrame {
         JButton btnRiwayat = createMenuButton("Riwayat Keluhan");
         JButton btnLogout = createMenuButton("Logout");
 
-        // Memasukkan komponen ke Sidebar
+        //komponen Sidebar
         sidebarPanel.add(lblMenu);
         sidebarPanel.add(btnDashboard);
         sidebarPanel.add(btnBuatKeluhan);
         sidebarPanel.add(btnRiwayat);
-        sidebarPanel.add(Box.createVerticalGlue()); // Pendorong tombol logout ke paling bawah
+        sidebarPanel.add(Box.createVerticalGlue()); 
         sidebarPanel.add(btnLogout);
-        sidebarPanel.add(Box.createVerticalStrut(20)); // Jarak bawah
+        sidebarPanel.add(Box.createVerticalStrut(20)); 
 
         //Main content 
         cardLayout = new CardLayout();
         mainContentPanel = new JPanel(cardLayout);
         mainContentPanel.setBackground(Color.WHITE);
         
-        // --- FIX NYA DI SINI ---
-        // 1. Inisialisasi panel ke dalam variabel
+        // 1. Inisialisasi panel
         panelDashboard = new DashboardMahasiswaPanel();
         panelRiwayat = new RiwayatKeluhanPanel(UserSession.getUser());
 
-        // 2. Masukkan panel pakai variabel (JANGAN pakai 'new' lagi buat yang udah ada variabelnya)
+        // 2. Masukkan panel pakai variabel 
         mainContentPanel.add(panelDashboard, "Dashboard");    
         mainContentPanel.add(new FormKeluhanPanel(), "BuatKeluhan"); 
         mainContentPanel.add(panelRiwayat, "Riwayat");
-        // -----------------------
 
-        // Memasukkan Sidebar dan Main Content ke Frame Utama
+        // sidebar dan main content pada frame utama 
         add(sidebarPanel, BorderLayout.WEST);
         add(mainContentPanel, BorderLayout.CENTER);
 

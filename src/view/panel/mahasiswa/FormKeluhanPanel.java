@@ -1,9 +1,9 @@
 package view.panel.mahasiswa;
 
 import controller.KeluhanController;
-import model.Keluhan;
-import model.Kategori;
-import model.Mahasiswa;
+import Entity.Keluhan;
+import Entity.Kategori;
+import Entity.Mahasiswa;
 import utils.UserSession;
 import javax.swing.*;
 import java.awt.*;

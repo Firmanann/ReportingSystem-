@@ -1,6 +1,6 @@
 package controller;
 
-import model.Kategori;
+import Entity.Kategori;
 import repository.KategoriRepository;
 import java.util.List;
 import javax.swing.JOptionPane;

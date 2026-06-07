@@ -1,6 +1,6 @@
 package repository;
 
-import model.Kategori;
+import Entity.Kategori;
 import utils.Koneksi;
 import java.sql.*;
 import java.util.ArrayList;

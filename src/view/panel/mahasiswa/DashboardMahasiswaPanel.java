@@ -8,7 +8,6 @@ import java.awt.*;
 
 public class DashboardMahasiswaPanel extends JPanel {
 
-    // 1. Jadikan JLabel sebagai variabel global biar bisa di-update berkali-kali
     private JLabel lblTotal;
     private JLabel lblDiproses;
     private JLabel lblSelesai;
@@ -28,7 +27,7 @@ public class DashboardMahasiswaPanel extends JPanel {
         setLayout(new BorderLayout(20, 20));
         setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
-        // 2. Bagian Header (Judul Halaman)
+        //header 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
         
@@ -43,17 +42,17 @@ public class DashboardMahasiswaPanel extends JPanel {
         headerPanel.add(lblWelcome, BorderLayout.NORTH);
         headerPanel.add(lblSub, BorderLayout.CENTER);
 
-        // 3. Bagian Konten (Kartu Statistik dengan GridLayout)
+        //kotak statistik 
         JPanel cardsPanel = new JPanel(new GridLayout(1, 3, 20, 0));
         cardsPanel.setBackground(Color.WHITE);
         cardsPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
 
-        // Masukkan label global ke dalam kartu pembantu
         cardsPanel.add(createStatCard("Total Keluhan", lblTotal));
         cardsPanel.add(createStatCard("Menunggu", lblDiproses));
         cardsPanel.add(createStatCard("Selesai", lblSelesai));
 
-        // Memasukkan header dan kartu ke dalam Panel utama
+
+        //header dalam panel utama 
         add(headerPanel, BorderLayout.NORTH);
         add(cardsPanel, BorderLayout.CENTER);
 
@@ -61,24 +60,21 @@ public class DashboardMahasiswaPanel extends JPanel {
         loadData();
     }
 
-    // --- METHOD INI YANG BAKAL DIPANGGIL SAMA FRAME BUAT REFRESH ---
+
+    //load data untuk refresh data 
     public void loadData() {
-        String nim = UserSession.getUser(); // Ambil session mahasiswa
+        String nim = UserSession.getUser(); 
         
-        // NOTE: Pastikan method di controller lu (getTotalStatus dll) 
-        // menerima parameter 'nim', biar yang dihitung cuma keluhan dia aja.
-        // Kalo method lu sebelumnya gak pakai parameter, lu wajib tambahin di controllernya.
         int total = keluhanController.getTotalStatus(nim); 
         int diproses = keluhanController.getDiprosesStatus(nim);
         int selesai = keluhanController.getSelesaiStatus(nim);
 
-        // Timpa text lama dengan data terbaru dari database
         lblTotal.setText(String.valueOf(total));
         lblDiproses.setText(String.valueOf(diproses));
         lblSelesai.setText(String.valueOf(selesai));
     }
 
-    // Method pembantu untuk membuat JLabel nilai biar rapi dan seragam
+    //Label nilai biar rapi dan seragam
     private JLabel createValueLabel() {
         JLabel lbl = new JLabel("0");
         lbl.setFont(new Font("Arial", Font.BOLD, 48));
@@ -88,13 +84,13 @@ public class DashboardMahasiswaPanel extends JPanel {
         return lbl;
     }
 
-    // Method pembantu untuk membuat kotak desain bergaris tepi hitam
+    //kotak desain bergaris tepi hitam
     private JPanel createStatCard(String title, JLabel lblValue) {
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
         
-        // Membuat border hitam tebal (2px)
+        //border hitam tebal (2px)
         card.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.BLACK, 2),
                 BorderFactory.createEmptyBorder(20, 20, 20, 20)
@@ -106,7 +102,7 @@ public class DashboardMahasiswaPanel extends JPanel {
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         card.add(lblTitle);
-        card.add(lblValue); // Label yang dimasukkan adalah label referensi global
+        card.add(lblValue); 
 
         return card;
     }

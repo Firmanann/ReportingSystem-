@@ -1,8 +1,8 @@
 package repository;
 
-import model.Keluhan;
-import model.Petugas;
-import model.Tanggapan;
+import Entity.Keluhan;
+import Entity.Petugas;
+import Entity.Tanggapan;
 import utils.Koneksi;
 
 import java.sql.*;

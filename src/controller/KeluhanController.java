@@ -1,6 +1,6 @@
 package controller;
 
-import model.Keluhan;
+import Entity.Keluhan;
 import repository.KeluhanRepository;
 import java.util.List;
 
@@ -21,7 +21,6 @@ public class KeluhanController {
     }
     
     //Get total keluhan Petugas
-// Get total keluhan Petugas
     public int getTotalStatus() {
         return repoKeluhan.countSemuaKeluhan("total");
     }

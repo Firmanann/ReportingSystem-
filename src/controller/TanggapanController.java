@@ -1,8 +1,8 @@
 package controller;
 
-import model.Keluhan;
-import model.Petugas;
-import model.Tanggapan;
+import Entity.Keluhan;
+import Entity.Petugas;
+import Entity.Tanggapan;
 import repository.TanggapanRepository;
 import java.sql.Timestamp;
 

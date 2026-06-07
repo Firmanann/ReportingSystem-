@@ -1,8 +1,7 @@
 package repository;
 
-import model.Petugas;
+import Entity.Petugas;
 import utils.Koneksi;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

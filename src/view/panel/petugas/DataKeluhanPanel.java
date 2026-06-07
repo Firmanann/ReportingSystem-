@@ -1,7 +1,7 @@
 package view.panel.petugas;
 
 import controller.KeluhanController;
-import model.Keluhan;
+import Entity.Keluhan;
 import view.frame.MainPetugasFrame;
 
 import javax.swing.*;
@@ -14,9 +14,8 @@ public class DataKeluhanPanel extends JPanel {
     private JTable table;
     private DefaultTableModel tableModel;
     private KeluhanController keluhanController;
-    private MainPetugasFrame mainFrame; // Tambahan variabel buat pindah frame
+    private MainPetugasFrame mainFrame;
 
-    // Constructor sekarang minta parameter MainPetugasFrame
     public DataKeluhanPanel(MainPetugasFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.keluhanController = new KeluhanController();
@@ -44,7 +43,7 @@ public class DataKeluhanPanel extends JPanel {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         headerPanel.add(lblSub, BorderLayout.CENTER);
 
-        // Setup Tabel (Bikin tabel gak bisa di-edit manual dari cell)
+        // Setup Tabel
         String[] columns = {"ID Keluhan", "Kategori", "Isi Keluhan", "Tanggal", "Status"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -54,16 +53,17 @@ public class DataKeluhanPanel extends JPanel {
         };
         table = new JTable(tableModel);
 
-        // ======== LOGIC KLIK TABEL ========
+        // logic click table 
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                
                 // Klik 2 kali untuk ngebuka panel tanggapan
                 if (evt.getClickCount() == 2) {
                     int row = table.getSelectedRow();
                     if (row != -1) {
-                        String idKeluhan = table.getValueAt(row, 0).toString(); // Ambil ID Keluhan
-                        mainFrame.bukaPanelTanggapan(idKeluhan); // Lempar ke MainFrame buat ganti layar
+                        String idKeluhan = table.getValueAt(row, 0).toString(); 
+                        mainFrame.bukaPanelTanggapan(idKeluhan); 
                     }
                 }
             }

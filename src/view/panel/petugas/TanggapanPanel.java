@@ -79,14 +79,14 @@ public class TanggapanPanel extends JPanel {
         add(formPanel, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);
  
-        // Tombol Kembali: Balik ke halaman Data Keluhan tanpa ngapa-ngapain
+        //Balik ke halaman Data Keluhan tanpa ngapa-ngapain
         btnKembali.addActionListener(e -> {
             mainFrame.kembaliKeDataKeluhan();
         });
         
         TanggapanController tanggapanController = new TanggapanController();
 
-        // Tombol Kirim: Eksekusi simpan dan update
+        //simpan dan update
         btnKirim.addActionListener(e -> {
             String isi = txtTanggapan.getText();
             
@@ -95,14 +95,11 @@ public class TanggapanPanel extends JPanel {
                 return;
             }
             
-            // Panggil controller untuk proses simpan data & update status keluhan
             boolean sukses = tanggapanController.kirimTanggapan(idKeluhan, isi);
             
             if (sukses) {
-                // Munculin notif sukses dulu
                 JOptionPane.showMessageDialog(this, "Tanggapan berhasil dikirim dan status diperbarui!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
                 
-                // Baru balik ke tabel utama
                 mainFrame.kembaliKeDataKeluhan(); 
             } else {
                 JOptionPane.showMessageDialog(this, "Gagal mengirim tanggapan. Terjadi kesalahan sistem.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -110,7 +107,7 @@ public class TanggapanPanel extends JPanel {
         });
     }
 
-    // Method pembantu buat desain tombol monokrom
+    //desain tombol monokrom
     private void styleButton(JButton btn, Color bg, Color fg, boolean isOutline) {
         btn.setBackground(bg);
         btn.setForeground(fg);

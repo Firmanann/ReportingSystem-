@@ -1,7 +1,7 @@
 package view.panel.mahasiswa;
 
 import controller.KeluhanController;
-import model.Keluhan;
+import Entity.Keluhan;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -57,6 +57,7 @@ public class RiwayatKeluhanPanel extends JPanel {
     }
 
     public void loadData() {
+        
         // Kosongkan tabel sebelum diisi ulang
         tableModel.setRowCount(0);
 

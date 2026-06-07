@@ -14,6 +14,7 @@ public class LoginFrame extends JFrame {
 
     //UI Design
     public LoginFrame() {
+        
         // Setup dasar Frame
         setTitle("Login - Reporting System");
         setSize(400, 350);

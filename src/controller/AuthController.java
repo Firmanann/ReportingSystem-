@@ -1,7 +1,7 @@
 package controller;
 
-import model.Mahasiswa;
-import model.Petugas;
+import Entity.Mahasiswa;
+import Entity.Petugas;
 import repository.MahasiswaRepository;
 import repository.PetugasRepository;
 

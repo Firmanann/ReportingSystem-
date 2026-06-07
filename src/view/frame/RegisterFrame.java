@@ -6,7 +6,6 @@ import controller.AuthController;
 
 public class RegisterFrame extends JFrame {
     
-    // 1. Deklarasi text field sesuai properti di model Mahasiswa
     private JTextField txtNim;
     private JTextField txtNama;
     private JTextField txtProdi;
@@ -19,7 +18,7 @@ public class RegisterFrame extends JFrame {
     public RegisterFrame() {
         
         
-        // Setup dasar Frame (Ukuran tinggi ditambah jadi 500 karena field-nya bertambah)
+        // Setup dasar Frame 
         setTitle("Register - Reporting System");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +31,7 @@ public class RegisterFrame extends JFrame {
         lblHeader.setFont(new Font("Arial", Font.BOLD, 18));
         lblHeader.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
         
-        // Panel Form (Diubah jadi 6 baris untuk menampung semua field)
+        // Panel Form 
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 15));
         formPanel.setBackground(Color.WHITE);
         formPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
@@ -79,7 +78,7 @@ public class RegisterFrame extends JFrame {
         btnPanel.add(btnRegister);
         btnPanel.add(btnLogin);
 
-        // Menambahkan komponen ke Frame
+        // komponen form
         add(lblHeader, BorderLayout.NORTH);
         add(formPanel, BorderLayout.CENTER);
         add(btnPanel, BorderLayout.SOUTH);
@@ -90,7 +89,9 @@ public class RegisterFrame extends JFrame {
     }
 
     private void handleRegister() {
-        // 2. Proses sedot semua data dari text field UI
+        
+
+        //data input 
         String nim = txtNim.getText();
         String nama = txtNama.getText();
         String prodi = txtProdi.getText();
@@ -98,13 +99,13 @@ public class RegisterFrame extends JFrame {
         String email = txtEmail.getText();
         String password = new String(txtPassword.getPassword());
 
-        // Validasi dasar biar gak ada data kosong melenggang ke DB
+        // validasi input 
         if (nim.isEmpty() || nama.isEmpty() || prodi.isEmpty() || phone.isEmpty() || email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Semua field harus diisi!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 3. Kirim lengkap ke AuthController
+        //kirim data ke controller untuk di proses 
         AuthController authController = new AuthController();
         boolean sukses = authController.register(nim, nama, prodi, phone, email, password);
 

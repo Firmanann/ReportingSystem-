@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Mahasiswa;
+import Entity.Mahasiswa;
 import utils.Koneksi;
 
 public class MahasiswaRepository {

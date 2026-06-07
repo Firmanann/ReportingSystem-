@@ -1,8 +1,8 @@
 package repository;
 
-import model.Keluhan;
-import model.Kategori;
-import model.Mahasiswa;
+import Entity.Keluhan;
+import Entity.Kategori;
+import Entity.Mahasiswa;
 import utils.Koneksi;
 
 import java.sql.*;
